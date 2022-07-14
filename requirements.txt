@@ -1,0 +1,12 @@
+
+scipy
+matplotlib
+termcolor
+colorama
+pandas
+statsmodels
+krippendorff
+attrs
+cattrs
+openpyxl
+nltk
