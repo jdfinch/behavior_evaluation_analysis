@@ -91,11 +91,14 @@ class stat(sym):
     fleiss_kappa = "Fleiss' kappa"
     kripp_alpha = "Krippendorff's alpha"
     kend_tau = "Kendall's tau"
+    mcfad_r2 = "McFadden's pseudo-R-squared"
     ci_low = "CI low"
     ci_high = "CI high"
     proportion = 'proportion'
     mean = 'mean'
     n = 'n'
+    likert_dialogue_quality = 'likert dialogue quality'
+    likert_turn_quality = 'likert turn quality'
 
 class stage:
     annotation_pilots = 'annotation_pilots'
