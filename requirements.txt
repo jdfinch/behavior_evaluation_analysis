@@ -1,4 +1,4 @@
-
+jupyter
 scipy
 matplotlib
 termcolor

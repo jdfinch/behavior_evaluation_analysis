@@ -1,0 +1,65 @@
+bot,label,proportion,CI low,CI high,n
+rerank_blender,empathetic,0.435,0.410,0.460,1500
+rerank_blender,follow up,0.419,0.395,0.444,1500
+rerank_blender,preference info,0.309,0.286,0.333,1500
+rerank_blender,topic switch,0.253,0.231,0.275,1500
+rerank_blender,life info,0.248,0.227,0.270,1500
+rerank_blender,correct fact,0.218,0.198,0.240,1500
+rerank_blender,commonsense contradiction,0.189,0.170,0.210,1500
+rerank_blender,irrelevant,0.177,0.158,0.197,1500
+rerank_blender,incorrect fact,0.176,0.158,0.196,1500
+rerank_blender,lack of empathy,0.085,0.072,0.100,1500
+rerank_blender,ignore,0.079,0.067,0.094,1500
+rerank_blender,partner contradiction,0.062,0.051,0.075,1500
+rerank_blender,self contradiction,0.043,0.034,0.055,1500
+rerank_blender,redundant,0.037,0.029,0.048,1500
+rerank_blender,uninterpretable,0.021,0.015,0.030,1500
+rerank_blender,antisocial,0.007,0.004,0.012,1500
+emora,empathetic,0.413,0.389,0.438,1522
+emora,follow up,0.404,0.380,0.429,1522
+emora,topic switch,0.290,0.268,0.314,1522
+emora,preference info,0.246,0.225,0.268,1522
+emora,life info,0.204,0.184,0.225,1522
+emora,irrelevant,0.148,0.131,0.167,1522
+emora,lack of empathy,0.143,0.126,0.161,1522
+emora,commonsense contradiction,0.118,0.103,0.135,1522
+emora,ignore,0.117,0.102,0.134,1522
+emora,correct fact,0.104,0.089,0.120,1522
+emora,partner contradiction,0.062,0.051,0.076,1522
+emora,redundant,0.056,0.045,0.069,1522
+emora,self contradiction,0.007,0.004,0.013,1522
+emora,incorrect fact,0.001,0.000,0.005,1522
+emora,antisocial,0.001,0.000,0.004,1522
+emora,uninterpretable,0.001,0.000,0.004,1522
+blender2_3B,follow up,0.621,0.597,0.645,1524
+blender2_3B,empathetic,0.425,0.401,0.450,1524
+blender2_3B,preference info,0.382,0.358,0.407,1524
+blender2_3B,life info,0.260,0.239,0.283,1524
+blender2_3B,correct fact,0.217,0.197,0.238,1524
+blender2_3B,commonsense contradiction,0.162,0.144,0.181,1524
+blender2_3B,topic switch,0.157,0.140,0.177,1524
+blender2_3B,irrelevant,0.100,0.086,0.117,1524
+blender2_3B,ignore,0.089,0.075,0.104,1524
+blender2_3B,redundant,0.076,0.064,0.091,1524
+blender2_3B,self contradiction,0.068,0.056,0.081,1524
+blender2_3B,partner contradiction,0.067,0.055,0.081,1524
+blender2_3B,lack of empathy,0.056,0.045,0.068,1524
+blender2_3B,incorrect fact,0.009,0.005,0.015,1524
+blender2_3B,antisocial,0.004,0.002,0.009,1524
+blender2_3B,uninterpretable,0.001,0.000,0.005,1524
+bart_fid_rag_bcb,follow up,0.634,0.609,0.658,1512
+bart_fid_rag_bcb,preference info,0.394,0.369,0.418,1512
+bart_fid_rag_bcb,correct fact,0.356,0.332,0.380,1512
+bart_fid_rag_bcb,empathetic,0.333,0.309,0.357,1512
+bart_fid_rag_bcb,life info,0.267,0.245,0.289,1512
+bart_fid_rag_bcb,commonsense contradiction,0.217,0.197,0.238,1512
+bart_fid_rag_bcb,incorrect fact,0.147,0.131,0.166,1512
+bart_fid_rag_bcb,lack of empathy,0.146,0.129,0.164,1512
+bart_fid_rag_bcb,self contradiction,0.117,0.102,0.134,1512
+bart_fid_rag_bcb,topic switch,0.115,0.100,0.132,1512
+bart_fid_rag_bcb,ignore,0.114,0.099,0.131,1512
+bart_fid_rag_bcb,irrelevant,0.110,0.095,0.127,1512
+bart_fid_rag_bcb,partner contradiction,0.071,0.059,0.085,1512
+bart_fid_rag_bcb,redundant,0.054,0.044,0.067,1512
+bart_fid_rag_bcb,uninterpretable,0.013,0.008,0.020,1512
+bart_fid_rag_bcb,antisocial,0.001,0.000,0.005,1512
