@@ -182,8 +182,8 @@ class Evaluation:
                 annotations.remove(ua)
             num_double_annotated = len(set(annotations))
             annotated_counts[(category, label)] = {
-                'dialogues annotated': num_annotated,
-                'double annotated': num_double_annotated
+                'dialogues annotated': num_annotated if 'comparative' not in category else num_annotated / 2,
+                'double annotated': num_double_annotated if 'comparative' not in category else num_double_annotated / 2
             }
         return pd.DataFrame(annotated_counts.values(), annotated_counts)
 
