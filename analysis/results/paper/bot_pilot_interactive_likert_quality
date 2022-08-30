@@ -1,0 +1,8 @@
+bot,mean,CI low,CI high,n
+blender2_3B,3.400,1.734,5.066,5
+emora,3.400,2.631,4.169,10
+rerank_blender,3.100,2.120,4.080,10
+bart_fid_rag_bcb,2.700,1.805,3.595,10
+rerank_blender2,2.100,1.244,2.956,10
+dukenet,1.889,1.176,2.602,9
+cem,1.083,0.900,1.267,12
