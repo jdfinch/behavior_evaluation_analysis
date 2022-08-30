@@ -1,4 +1,6 @@
 
+import nltk
+import random
 import json
 import numpy as np
 import pandas as pd
@@ -7,6 +9,7 @@ import statsmodels.api as sm
 from scipy.stats import bootstrap as retarded_bootstrap
 from scipy.stats import ttest_ind
 import krippendorff
+import evaluation_data_definitions as edd
 
 from cattrs import structure
 
@@ -226,31 +229,218 @@ def prop_and_ci(df: pd.DataFrame):
     return pd.Series(result.values(), result)
 
 
-def sign_tests(df: pd.DataFrame):
-    """
-    :param df: (bot, data point) x label -> -1/0/1
-    :return: p values of test on each bot pair (pd.Series)
-    """
-
-def t_tests(df: pd.DataFrame):
-    """
-    :param df: (bot, data point) x label -> score
-    :return: p values of test on each bot pair (pd.Series)
-    """
-
-
-def prop_tests(df: pd.DataFrame):
-    """
-    :param df: (bot, data point) x label -> 0/1
-    :return: p values of test on each bot pair (pd.Series)
-    """
+def to_file(f):
+    def fn_to_file(*args, load=None, reload=None, **kwargs):
+        if load:
+            return pd.read_pickle(load)
+        result = f(*args, **kwargs)
+        if reload:
+            result.to_pickle(reload)
+            return pd.read_pickle(reload)
+        return result
+    return fn_to_file
 
 
-def regressions(df):
+def prettify(df, float_prec=None, col_types=None, sort_by=None, to_csv=None, index=True, header=True):
+    if col_types:
+        for col, type in col_types.items():
+            df[col] = df[col].astype(type)
+    if sort_by:
+        df.sort_values(sort_by, ascending=False, inplace=True)
+    if float_prec:
+        df = df.round(float_prec)
+    if to_csv:
+        df.to_csv(to_csv, float_format=f"%.{float_prec}f", header=header, index=index)
+    return df
+
+
+@to_file
+def across_evaluations(annotations, evaluation_fn):
     """
-    :param df: dialogue x (*features, quality) -> value
-    :return: *(coef, low, high), mcfadden r^2
+    :param annotations: iterable of annotations df to apply evaluation_fn to
+    :param evaluation_fn: function (input is annotations df, output is results df)
+    :return: results dataframe where first index level codes which evaluation (integer id)
     """
+    results = [evaluation_fn(annotation) for annotation in annotations]
+    all_results = pd.concat(results, keys=range(len(results)))
+    all_results.index.set_names('round', level=0, inplace=True)
+    return all_results
+
+
+def get_example(
+        evaluation,
+        category,
+        label,
+        mark,
+        bot=None,
+        context=0,
+        seed=123,
+        annotations: pd.DataFrame = None
+):
+    if annotations is None:
+        annotations = evaluation.annotation_dataframe()
+    labels = annotations.xs((category, label), level=(1, 2)).reset_index()
+    options = labels[labels[0] == mark]
+    if bot:
+        options = options[options[sym.bot] == bot]
+    try:
+        example = options.sample(1, random_state=seed)
+    except ValueError:
+        return f'No samples for {category} {label} {mark} {bot}\n'
+    eid = example[sym.item].item()
+    if isinstance(eid, tuple):
+        did, tid = eid
+        turns = evaluation.dialogues[did].turns[max(0, tid-context):tid+1]
+        botstring = '' if not bot else f'{bot}~~~\n'
+        contextstring = ''.join((
+            (
+                f'User:  {turn.user_turn}\n'
+                f'Sys:   {turn.bot_turn}\n'
+            )
+            for turn in turns[:-1]
+        ))
+        turn = turns[-1]
+        turnstring = (
+            f'User:  {turn.user_turn}\n'
+            f'Sys:   {turn.bot_turn}\n'
+            f'Label: {label} = {mark}\n'
+        )
+        return botstring + contextstring + turnstring
+    else:
+        dialogue = evaluation.dialogues[eid]
+        turns = [
+            turn
+            for turn_pair in dialogue.turns
+            for turn in (turn_pair.user_turn, turn_pair.bot_turn)
+        ]
+        return '\n'.join([f'{dialogue.bot}~~~', *turns, f'Label: {label} = {mark}\n'])
+
+
+@to_file
+def interactor_summary_stats(evaluation: edd.Evaluation):
+    num_dialogues = len(evaluation.dialogues)
+    mean_turns = (
+        sum((
+            2*len(d.turns)
+            for d in evaluation.dialogues.values()
+        ))
+        / num_dialogues
+    )
+    user_turn_len = (
+        sum((
+            len(nltk.word_tokenize(t.user_turn))
+            for d in evaluation.dialogues.values()
+            for t in d.turns
+        ))
+        / sum((
+            len(d.turns)
+            for d in evaluation.dialogues.values()
+        ))
+    )
+    num_interactors = len({
+        unit.worker_id
+        for unit in evaluation.work_units.values()
+    })
+    summary = {
+        'dialogues': num_dialogues,
+        'mean turns': mean_turns,
+        'user turn length': user_turn_len,
+        'interactors': num_interactors,
+    }
+    return pd.DataFrame(summary.values(), summary)
+
+@to_file
+def screening_rates_by_label(evaluation: edd.OnboardingEvaluation):
+    perfs = {}
+    workers_passed = {}
+    workers_attempted = {}
+    for did, dialogue in evaluation.dialogues.items():
+        for attempt in dialogue.attempts:
+            work_unit = evaluation.work_units[attempt.work_unit_id]
+            round = int(did.split('_')[-1])
+            task = work_unit.task
+            labels = work_unit.labels
+            num_mistakes = len(attempt.mistakes)
+            worker = work_unit.worker_id
+            accuracy = attempt.performance
+            perfs.setdefault(task, []).append((num_mistakes, accuracy))
+            workers_attempted.setdefault(task, set()).add(worker)
+            if attempt.passed:
+                workers_passed.setdefault(task, set()).add(worker)
+    screening = {}
+    for task, ls in perfs.items():
+        mistakes, accuracies = zip(*ls)
+        avg_m = sum(mistakes) / len(mistakes)
+        avg_a = (
+            sum(accuracies) / len(accuracies)
+            if all((a is not None for a in accuracies)) else None
+        )
+        n = len(mistakes)
+        attempted = len(workers_attempted.get(task, ()))
+        passed = len(workers_passed.get(task, ()))
+        screening[task] = {
+            'attempted': attempted, 'passed': passed,
+            'mistakes': avg_m, 'accuracy': avg_a, 'n': n
+        }
+    return pd.DataFrame(screening.values(), screening)
+
+
+@to_file
+def agreement_dataframe(annotations, ci=True):
+    doubly_annotated = annotations.iloc[:,:2].dropna().astype(int)
+    label_groups = doubly_annotated.groupby(level=[sym.category, sym.label])
+    kappas = label_groups.apply(fleiss_kappa, ci=ci)
+    alphas = label_groups.apply(krippendorfs_alpha, ci=ci)
+    agreements = pd.concat((alphas, kappas), axis=1)
+    return agreements
+
+
+def get_singly_annotated(df: pd.DataFrame, seed=None):
+    if len(df.columns) == 1:
+        return df.astype(int)
+    previous_state = random.getstate()
+    random.seed(seed)
+    df = df.iloc[:,:2]
+    mask = df[1].isna()
+    singly_annotated = df.iloc[:,0][mask]
+    doubly_annotated = df[~mask]
+    selection = [random.randint(0, 1) for _ in range(len(doubly_annotated))]
+    indices = list(range(len(doubly_annotated)))
+    select_annotated = doubly_annotated.values[indices, selection]
+    select_annotated = pd.DataFrame(select_annotated, index=doubly_annotated.index)
+    annotations = pd.concat((singly_annotated, select_annotated))
+    random.setstate(previous_state)
+    return annotations.astype(int)
+
+
+@to_file
+def evaluate_comparisons(annotations):
+    single_annotated = get_singly_annotated(annotations)
+    prop_dfs = []
+    for cmp, cmp_label in {-1: 'lose', 0: 'tie', 1: 'win'}.items():
+        annotated = single_annotated == cmp
+        annotated = annotated.astype(int)
+        groups = annotated.groupby(level=[sym.bot, sym.bot_cmp, sym.label])
+        props = groups.apply(prop_and_ci)
+        props.rename(columns={stat.proportion: cmp_label}, inplace=True)
+        prop_dfs.append(props)
+    result = pd.concat(prop_dfs, axis=1)
+    prop_dfs = []
+    for cmp, cmp_label in {-1: 'lose', 0: 'tie', 1: 'win'}.items():
+        annotated = single_annotated == cmp
+        annotated = annotated.astype(int)
+        groups = annotated.groupby(level=[sym.bot, sym.label])
+        props = groups.apply(prop_and_ci)
+        props.rename(columns={stat.proportion: cmp_label}, inplace=True)
+        prop_dfs.append(props)
+    result_vs_all = pd.concat(prop_dfs, axis=1)
+    others_idx = {sym.bot_cmp: 'others'}
+    result_vs_all = result_vs_all.assign(**others_idx)
+    levels = [sym.bot, sym.bot_cmp, sym.label]
+    result_vs_all = result_vs_all.set_index(sym.bot_cmp, append=True)
+    result_vs_all = result_vs_all.reset_index().set_index(levels)
+    result = pd.concat((result_vs_all, result))
+    return result
 
 
 __all__ = [
@@ -271,7 +461,18 @@ __all__ = [
     'fleiss_kappa',
     'krippendorfs_alpha',
     'mean_and_ci',
-    'prop_and_ci'
+    'prop_and_ci',
+
+    # utils
+    'to_file',
+    'prettify',
+    'across_evaluations',
+    'get_example',
+    'interactor_summary_stats',
+    'screening_rates_by_label',
+    'agreement_dataframe',
+    'get_singly_annotated',
+    'evaluate_comparisons'
 
 ]
 
