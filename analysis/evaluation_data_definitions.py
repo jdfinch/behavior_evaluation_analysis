@@ -160,6 +160,25 @@ class Evaluation:
         df.index.set_names(['bot', 'bot comp', 'label', 'dialogues'], inplace=True)
         return df
 
+    def timing_dataframe(self):
+        marks = {}
+        for label_category, annotations in self.annotations().items():
+            for item, annotation in annotations:
+                work_unit = self.work_units[annotation.work_unit_id]
+                marks.setdefault(
+                    (label_category, annotation.work_unit_id), set()
+                ).add(work_unit.time_to_complete_sec)
+        timings = {}
+        for key, value in marks.items():
+            labels = ', '.join(self.work_units[key[1]].labels)
+            new_key = (key[0], labels, key[1])
+            assert len(value) == 1
+            timings[new_key] = next(iter(value))
+        df = pd.DataFrame(timings.values(), timings)
+        df.index.set_names(['category', 'labels', 'id'], inplace=True)
+        df.columns = ['completion time (sec)']
+        return df
+
     def annotation_counts(self):
         """
         :return: Dataframe of number of dialogues annotated per category label
