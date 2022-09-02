@@ -8,6 +8,13 @@ from cattrs import structure, unstructure
 list_field = field(factory=list)
 dict_field = field(factory=dict)
 
+@define
+class SubtaskDurations:
+    first_bot: float = -1.0
+    second_bot: float = -1.0
+    first_likert: float = -1.0
+    second_likert: float = -1.0
+    comparative: float = -1.0
 
 @define
 class WorkUnit:
@@ -17,6 +24,8 @@ class WorkUnit:
     task: str = None
     labels: list[str] = list_field
     dialogue_ids: list[str] = list_field
+    subtask_durations: SubtaskDurations | None = None
+    completion_date: str = ''
 
 
 @define
@@ -161,19 +170,42 @@ class Evaluation:
         return df
 
     def timing_dataframe(self):
-        marks = {}
+        timings = {}
         for label_category, annotations in self.annotations().items():
             for item, annotation in annotations:
                 work_unit = self.work_units[annotation.work_unit_id]
-                marks.setdefault(
-                    (label_category, annotation.work_unit_id), set()
+                if label_category == 'comparative':
+                    assert len(work_unit.dialogue_ids) == 2
+                    mid = '|'.join(work_unit.dialogue_ids)
+                else:
+                    assert len(work_unit.dialogue_ids) == 1
+                    mid = work_unit.dialogue_ids[0]
+                timings.setdefault(
+                    (label_category, ', '.join(work_unit.labels), mid), set()
                 ).add(work_unit.time_to_complete_sec)
+        flattened = {}
+        for key, values in timings.items():
+            if len(values) > 1:
+                extracted = values.pop()
+                if len(values) > 1:
+                    timings[key] = {values.pop()}
+                new_key = (key[0], key[1], key[2]+'_2')
+                flattened[new_key] = {extracted}
+        timings.update(flattened)
+        df = pd.DataFrame(timings.values(), timings)
+        df.index.set_names(['category', 'labels', 'id'], inplace=True)
+        df.columns = ['completion time (sec)']
+        return df
+
+    def interactive_timing_dataframe(self):
         timings = {}
-        for key, value in marks.items():
-            labels = ', '.join(self.work_units[key[1]].labels)
-            new_key = (key[0], labels, key[1])
-            assert len(value) == 1
-            timings[new_key] = next(iter(value))
+        for id, unit in self.work_units.items():
+            assert len(unit.dialogue_ids) == 2
+            timings[('dialogue', 'collect', unit.dialogue_ids[0])] = unit.subtask_durations.first_bot
+            timings[('dialogue', 'collect', unit.dialogue_ids[1])] = unit.subtask_durations.second_bot
+            timings[('interactive likert', ', '.join(unit.labels), unit.dialogue_ids[0])] = unit.subtask_durations.first_likert
+            timings[('interactive likert', ', '.join(unit.labels), unit.dialogue_ids[1])] = unit.subtask_durations.second_likert
+            timings[('interactive comparative', ', '.join(unit.labels), '|'.join(unit.dialogue_ids))] = unit.subtask_durations.comparative
         df = pd.DataFrame(timings.values(), timings)
         df.index.set_names(['category', 'labels', 'id'], inplace=True)
         df.columns = ['completion time (sec)']
