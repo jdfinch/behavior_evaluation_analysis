@@ -1,0 +1,35 @@
+Predicted,,Likert Turn Quality,Likert Turn Quality,Likert Turn Quality,Likert Dialogue Quality,Likert Dialogue Quality,Likert Dialogue Quality,Likert Dialogue Quality,Likert Dialogue Quality
+Metric,,LR Coefficient,LR R-Squared,P value of F-test,LR Coefficient,LR R-Squared,P value of F-test,OR Pseudo R-Squared,P value of LLR-test
+category,label,,,,,,,,
+likert turn,consistent,0.22018,0.04654,1e-05,0.24864,0.0276,0.00085,0.00862,0.00225
+likert turn,emotional,0.16635,0.02928,0.00059,0.22243,0.02434,0.00175,0.00802,0.0032
+likert turn,engaging,0.16493,0.04114,4e-05,0.19437,0.02657,0.00107,0.00887,0.00194
+likert turn,grammatical,0.29904,0.06781,0.0,0.00659,2e-05,0.93777,0.0,0.9573
+likert turn,informative,0.01924,0.0004,0.68836,-0.05261,0.00141,0.45444,0.00046,0.47933
+likert turn,proactive,0.21331,0.06253,0.0,0.22051,0.03107,0.0004,0.01032,0.00083
+likert turn,quality,1.0,1.0,0.0,0.22776,0.02412,0.00184,0.00825,0.0028
+likert turn,relevant,0.25511,0.09226,0.0,0.21768,0.03124,0.00038,0.01012,0.00093
+behavior,antisocial,-3.60729,0.00827,0.06928,-0.00927,0.0,0.99747,0.0,0.96702
+behavior,commonsense contradiction,-1.19415,0.06063,0.0,-2.06686,0.08446,0.0,0.02971,0.0
+behavior,correct fact,-0.37007,0.01075,0.03816,-0.08224,0.00025,0.75402,0.00014,0.69687
+behavior,empathetic,0.53305,0.03006,0.0005,0.90559,0.04034,5e-05,0.01478,6e-05
+behavior,follow up,0.51605,0.03255,0.00029,0.32794,0.00611,0.1185,0.00282,0.08057
+behavior,ignore,-1.7188,0.07233,0.0,-1.96812,0.0441,2e-05,0.01622,3e-05
+behavior,incorrect fact,-0.90583,0.03955,6e-05,-0.69496,0.01083,0.0375,0.00354,0.05009
+behavior,irrelevant,-1.21588,0.05546,0.0,-1.66669,0.04846,1e-05,0.0175,1e-05
+behavior,lack of empathy,-1.03156,0.03894,7e-05,-1.82071,0.05641,0.0,0.02008,0.0
+behavior,life info,0.21801,0.0028,0.29079,0.42049,0.00485,0.16446,0.00148,0.20531
+behavior,partner contradiction,-1.43733,0.03773,9e-05,-3.32392,0.09382,0.0,0.03531,0.0
+behavior,preference info,0.3577,0.01165,0.03094,0.25218,0.00269,0.30064,0.00075,0.36851
+behavior,redundant,-0.42178,0.00264,0.3052,-2.65851,0.0488,1e-05,0.01548,4e-05
+behavior,self contradiction,-1.19834,0.02215,0.00285,-1.82208,0.02381,0.00197,0.00783,0.00359
+behavior,topic switch,-0.64819,0.01557,0.01252,-0.15859,0.00043,0.67809,0.00027,0.58954
+behavior,uninterpretable,-2.07462,0.00883,0.06044,-3.30846,0.01044,0.04108,0.00352,0.05075
+likert dialogue,consistent,0.03822,0.00604,0.12082,0.3839,0.28328,0.0,0.12196,0.0
+likert dialogue,emotional,0.09712,0.02544,0.00137,0.45774,0.26276,0.0,0.10688,0.0
+likert dialogue,engaging,0.08389,0.01732,0.0084,0.58396,0.39031,0.0,0.1764,0.0
+likert dialogue,grammatical,0.03235,0.00221,0.34831,0.28315,0.07875,0.0,0.03533,0.0
+likert dialogue,informative,0.01647,0.00057,0.63504,0.4646,0.20974,0.0,0.08125,0.0
+likert dialogue,proactive,0.05898,0.01004,0.04517,0.47087,0.29764,0.0,0.12848,0.0
+likert dialogue,quality,0.10592,0.02412,0.00184,1.0,1.0,0.0,1.0,0.0
+likert dialogue,relevant,0.1221,0.03822,8e-05,0.5123,0.31291,0.0,0.13511,0.0
