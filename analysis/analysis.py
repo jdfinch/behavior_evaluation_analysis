@@ -250,7 +250,7 @@ def prettify(df, float_prec=None, col_types=None, sort_by=None, to_csv=None, ind
     if float_prec:
         df = df.round(float_prec)
     if to_csv:
-        df.to_csv(to_csv, float_format=f"%.{float_prec}f", header=header, index=index)
+        df.to_csv(to_csv, float_format=f"%.{float_prec}f" if float_prec is not None else None, header=header, index=index)
     return df
 
 
