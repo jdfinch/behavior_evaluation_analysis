@@ -266,28 +266,31 @@ def across_evaluations(annotations, evaluation_fn):
     all_results.index.set_names('round', level=0, inplace=True)
     return all_results
 
-
 def get_example(
         evaluation,
         category,
         label,
-        mark,
+        mark=None,
         bot=None,
         context=0,
         seed=123,
-        annotations: pd.DataFrame = None
+        annotations: pd.DataFrame = None,
+        item_id=None
 ):
     if annotations is None:
         annotations = evaluation.annotation_dataframe()
-    labels = annotations.xs((category, label), level=(1, 2)).reset_index()
-    options = labels[labels[0] == mark]
-    if bot:
-        options = options[options[sym.bot] == bot]
-    try:
-        example = options.sample(1, random_state=seed)
-    except ValueError:
-        return f'No samples for {category} {label} {mark} {bot}\n'
-    eid = example[sym.item].item()
+    if item_id:
+        eid = item_id
+    else:
+        labels = annotations.xs((category, label), level=(1, 2)).reset_index()
+        options = labels[labels[0] == mark]
+        if bot:
+            options = options[options[sym.bot] == bot]
+        try:
+            example = options.sample(1, random_state=seed)
+        except ValueError:
+            return f'No samples for {category} {label} {mark} {bot}\n'
+        eid = example[sym.item].item()
     if isinstance(eid, tuple):
         did, tid = eid
         turns = evaluation.dialogues[did].turns[max(0, tid-context):tid+1]
@@ -300,12 +303,14 @@ def get_example(
             for turn in turns[:-1]
         ))
         turn = turns[-1]
+        if mark is None:
+            mark = annotations.xs((category, label, eid), level=(1, 2, 3))[0].item()
         turnstring = (
             f'User:  {turn.user_turn}\n'
             f'Sys:   {turn.bot_turn}\n'
             f'Label: {label} = {mark}\n'
         )
-        return botstring + contextstring + turnstring
+        display = botstring + contextstring + turnstring
     else:
         dialogue = evaluation.dialogues[eid]
         turns = [
@@ -313,8 +318,11 @@ def get_example(
             for turn_pair in dialogue.turns
             for turn in (turn_pair.user_turn, turn_pair.bot_turn)
         ]
-        return '\n'.join([f'{dialogue.bot}~~~', *turns, f'Label: {label} = {mark}\n'])
-
+        if mark is None:
+            mark = annotations.xs((category, label, eid), level=(1, 2, 3))[0].item()
+        display = '\n'.join([f'{dialogue.bot}~~~', *turns, f'Label: {label} = {mark}\n'])
+    print(display)
+    return eid
 
 @to_file
 def interactor_summary_stats(evaluation: edd.Evaluation):
