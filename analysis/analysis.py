@@ -95,6 +95,7 @@ class stat(sym):
     kripp_alpha = "Krippendorff's alpha"
     kend_tau = "Kendall's tau"
     mcfad_r2 = "McFadden's pseudo-R-squared"
+    r2 = "R-Squared"
     ci_low = "CI low"
     ci_high = "CI high"
     proportion = 'proportion'
@@ -102,6 +103,8 @@ class stat(sym):
     n = 'n'
     likert_dialogue_quality = 'likert dialogue quality'
     likert_turn_quality = 'likert turn quality'
+    p_of_f_test = 'P value of F-test'
+    p_of_llr_test = 'P value of LLR-test'
 
 class stage:
     annotation_pilots = 'annotation_pilots'
