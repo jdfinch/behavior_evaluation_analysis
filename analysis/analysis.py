@@ -174,7 +174,7 @@ def krippendorfs_alpha(df, ci=True):
     :param df: pandas dataframe: items x labeler: label
     :return:
     """
-    ratings = df.to_numpy().astype(int)
+    ratings = df.to_numpy()
     ka = lambda x: krippendorff.alpha(x.T, level_of_measurement='ordinal')
     try:
         alpha = ka(ratings)
@@ -394,8 +394,10 @@ def screening_rates_by_label(evaluation: edd.OnboardingEvaluation):
 
 
 @to_file
-def agreement_dataframe(annotations, ci=True):
-    doubly_annotated = annotations.iloc[:,:2].dropna().astype(int)
+def agreement_dataframe(annotations, ci=True, k=2, dropna=True):
+    doubly_annotated = annotations.iloc[:,:k]
+    if dropna:
+        doubly_annotated = doubly_annotated.dropna()
     label_groups = doubly_annotated.groupby(level=[sym.category, sym.label])
     kappas = label_groups.apply(fleiss_kappa, ci=ci)
     alphas = label_groups.apply(krippendorfs_alpha, ci=ci)

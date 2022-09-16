@@ -1,0 +1,41 @@
+,,0.001,0.01,0.05
+behavior,antisocial,0,0,1
+behavior,commonsense contradiction,4,4,4
+behavior,correct fact,5,5,5
+behavior,empathetic,3,3,3
+behavior,follow up,4,4,4
+behavior,ignore,1,3,4
+behavior,incorrect fact,4,5,5
+behavior,irrelevant,3,4,5
+behavior,lack of empathy,5,5,5
+behavior,life info,2,3,3
+behavior,partner contradiction,0,0,0
+behavior,preference info,5,5,5
+behavior,redundant,1,1,5
+behavior,self contradiction,5,5,6
+behavior,topic switch,4,5,6
+behavior,uninterpretable,4,4,4
+comparative,consistent,2,2,4
+comparative,emotional,0,0,2
+comparative,engaging,1,1,3
+comparative,grammatical,0,0,0
+comparative,informative,2,3,4
+comparative,proactive,2,3,5
+comparative,quality,0,0,0
+comparative,relevant,0,0,1
+likert dialogue,consistent,1,2,3
+likert dialogue,emotional,3,3,3
+likert dialogue,engaging,2,3,3
+likert dialogue,grammatical,2,3,4
+likert dialogue,informative,1,2,3
+likert dialogue,proactive,3,3,3
+likert dialogue,quality,2,3,3
+likert dialogue,relevant,1,3,3
+likert turn,consistent,1,3,3
+likert turn,emotional,4,4,4
+likert turn,engaging,3,4,5
+likert turn,grammatical,6,6,6
+likert turn,informative,5,5,6
+likert turn,proactive,4,4,5
+likert turn,quality,5,5,5
+likert turn,relevant,4,4,4
