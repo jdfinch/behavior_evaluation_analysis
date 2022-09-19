@@ -407,6 +407,13 @@ def agreement_dataframe(annotations, ci=True, k=2, dropna=True):
     agreements = pd.concat((alphas, kappas), axis=1)
     return agreements
 
+def correlation_dataframe(annotations, method, ci=True, k=2, dropna=True):
+    doubly_annotated = annotations.iloc[:,:k]
+    if dropna:
+        doubly_annotated = doubly_annotated.dropna()
+    label_groups = doubly_annotated.groupby(level=[sym.category, sym.label])
+    return label_groups.corr(method=method)
+
 
 def get_singly_annotated(df: pd.DataFrame, seed=None):
     if len(df.columns) == 1:
@@ -485,7 +492,8 @@ __all__ = [
     'screening_rates_by_label',
     'agreement_dataframe',
     'get_singly_annotated',
-    'evaluate_comparisons'
+    'evaluate_comparisons',
+    'correlation_dataframe'
 
 ]
 
