@@ -1,0 +1,17 @@
+ABC-Eval,R-Squared delta,Likert Turn,R-Squared delta,Likert Dialogue,R-Squared delta
+commonsense contradiction,0.0795 (nan),consistent,0.0369 (nan),engaging,0.3665 (nan)
+incorrect fact,0.1009 (0.0214),relevant,0.0595 (0.0226),consistent,0.5067 (0.1401)
+ignore,0.1210 (0.0202),proactive,0.0700 (0.0105),relevant,0.5340 (0.0273)
+empathetic,0.1302 (0.0092),emotional,0.0763 (0.0063),grammatical,0.5577 (0.0237)
+uninterpretable,0.1393 (0.0091),informative,0.0785 (0.0023),informative,0.5759 (0.0182)
+antisocial,0.1469 (0.0076),engaging,0.0804 (0.0019),proactive,0.5898 (0.0140)
+partner contradiction,0.1530 (0.0060),grammatical,0.0813 (0.0009),emotional,0.5984 (0.0085)
+preference info,0.1573 (0.0043),,,,
+self contradiction,0.1612 (0.0039),,,,
+irrelevant,0.1641 (0.0030),,,,
+lack of empathy,0.1657 (0.0016),,,,
+redundant,0.1674 (0.0017),,,,
+topic switch,0.1681 (0.0007),,,,
+follow up,0.1696 (0.0015),,,,
+correct fact,0.1701 (0.0006),,,,
+life info,0.1702 (0.0000),,,,

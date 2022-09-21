@@ -402,9 +402,9 @@ def agreement_dataframe(annotations, ci=True, k=2, dropna=True):
     if dropna:
         doubly_annotated = doubly_annotated.dropna()
     label_groups = doubly_annotated.groupby(level=[sym.category, sym.label])
-    kappas = label_groups.apply(fleiss_kappa, ci=ci)
-    alphas = label_groups.apply(krippendorfs_alpha, ci=ci)
-    agreements = pd.concat((alphas, kappas), axis=1)
+    # kappas = label_groups.apply(fleiss_kappa, ci=ci)
+    agreements = label_groups.apply(krippendorfs_alpha, ci=ci)
+    # agreements = pd.concat((alphas, kappas), axis=1)
     return agreements
 
 def correlation_dataframe(annotations, method, ci=True, k=2, dropna=True):
@@ -435,7 +435,7 @@ def get_singly_annotated(df: pd.DataFrame, seed=None):
 
 @to_file
 def evaluate_comparisons(annotations):
-    single_annotated = get_singly_annotated(annotations)
+    single_annotated = get_singly_annotated(annotations, seed=123)
     prop_dfs = []
     for cmp, cmp_label in {-1: 'lose', 0: 'tie', 1: 'win'}.items():
         annotated = single_annotated == cmp
