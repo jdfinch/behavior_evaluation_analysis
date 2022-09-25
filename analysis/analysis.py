@@ -123,6 +123,32 @@ class stage:
     surge_gold_units = 'surge_gold_units'
     expert_evaluation = 'expert_evaluation'
 
+annot_abbrev = {
+    'grammatical': 'Gra',
+    'quality': 'Qua',
+    'engaging': 'Eng',
+    'proactive': 'Pro',
+    'informative': 'Inf',
+    'relevant': 'Rel',
+    'consistent': 'Con',
+    'emotional': 'Emo',
+    'topic switch': 'Top',
+    'incorrect fact': '~Fac',
+    'life info': 'Lif',
+    'correct fact': 'Fac',
+    'ignore': 'Ign',
+    'antisocial': '∼Soc',
+    'redundant': 'Red',
+    'empathetic': 'Emp',
+    'follow up': 'Fol',
+    'preference info': 'Pre',
+    'irrelevant': '∼Rel',
+    'commonsense contradiction': '∼Com',
+    'partner contradiction': '∼Par',
+    'lack of empathy': '∼Emp',
+    'self contradiction': '∼Sel',
+    'uninterpretable': '∼Int'
+}
 
 
 def bootstrap_ci(data, statistic_fn, n_resamples=10**3):
@@ -476,6 +502,7 @@ __all__ = [
     'stage',
     'bot',
     'stat',
+    'annot_abbrev',
 
     # stats
     'fleiss_kappa',
