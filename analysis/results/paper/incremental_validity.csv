@@ -1,11 +1,11 @@
 ABC-Eval,R-Squared delta,Likert Turn,R-Squared delta,Likert Dialogue,R-Squared delta
 antisocial,15.9640 (nan),grammatical,8.5660 (nan),emotional,58.4260 (nan)
-life info,15.9550 (-0.0090),informative,8.5080 (-0.0580),informative,57.8320 (-0.5940)
-preference info,15.8500 (-0.1050),engaging,8.2850 (-0.2230),grammatical,56.4390 (-1.3930)
-commonsense contradiction,15.6920 (-0.1580),emotional,7.7530 (-0.5320),relevant,54.5170 (-1.9220)
-uninterpretable,15.5030 (-0.1890),consistent,6.8890 (-0.8640),proactive,51.6360 (-2.8810)
-ignore,15.2500 (-0.2530),proactive,5.7860 (-1.1030),consistent,48.6730 (-2.9630)
-correct fact,15.1970 (-0.0530),relevant,3.7760 (-2.0100),engaging,38.1030 (-10.5700)
+ignore,15.9550 (-0.0090),informative,8.5080 (-0.0580),informative,57.8320 (-0.5940)
+life info,15.9070 (-0.0480),engaging,8.2850 (-0.2230),grammatical,56.4390 (-1.3930)
+preference info,15.8130 (-0.0940),emotional,7.7530 (-0.5320),relevant,54.5170 (-1.9220)
+commonsense contradiction,15.6630 (-0.1500),consistent,6.8890 (-0.8640),proactive,51.6360 (-2.8810)
+uninterpretable,15.4660 (-0.1970),proactive,5.7860 (-1.1030),consistent,48.6730 (-2.9630)
+correct fact,15.1970 (-0.2690),relevant,3.7760 (-2.0100),engaging,38.1030 (-10.5700)
 topic switch,14.8090 (-0.3880),,,,
 follow up,14.5270 (-0.2820),,,,
 redundant,14.3660 (-0.1610),,,,
